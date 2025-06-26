@@ -2,18 +2,29 @@ const nodemailer = require('nodemailer');
 
 class EmailService {
   constructor() {
-    this.transporter = nodemailer.createTransporter({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      secure: false,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
+    // Only create transporter if email configuration exists
+    if (process.env.EMAIL_HOST && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      this.transporter = nodemailer.createTransporter({
+        host: process.env.EMAIL_HOST,
+        port: parseInt(process.env.EMAIL_PORT) || 587,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        }
+      });
+    } else {
+      console.warn('Email configuration not found. Email features will be disabled.');
+      this.transporter = null;
+    }
   }
 
   async sendOTP(email, otp) {
+    if (!this.transporter) {
+      console.log(`[DEV MODE] OTP for ${email}: ${otp}`);
+      return Promise.resolve();
+    }
+
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
@@ -50,6 +61,11 @@ class EmailService {
   }
 
   async sendRegistrationConfirmation(teamData) {
+    if (!this.transporter) {
+      console.log(`[DEV MODE] Registration confirmation for team: ${teamData.teamName}`);
+      return Promise.resolve();
+    }
+
     const leaderEmail = teamData.teamLeader === 'player1' 
       ? teamData.player1.email 
       : teamData.player2.email;
