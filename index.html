@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exploit Loader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+      font-family: 'Orbitron', sans-serif;
+      background: #0d0d0d;
+      overflow: hidden;
+    }
+
+    #loader {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background: #0d0d0d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    svg {
+      width: 80vw;
+      height: 80vw;
+      max-width: 300px;
+      max-height: 300px;
+    }
+
+    .text {
+      font-size: 10;
+      fill: #00ffff;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader with Animated X -->
+  <div id="loader">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <line id="line1" x1="0" y1="0" x2="0" y2="0" stroke="#0ff" stroke-width="6"/>
+      <line id="line2" x1="100" y1="0" x2="100" y2="0" stroke="#0ff" stroke-width="6"/>
+      <text x="50" y="50" class="text"></text>
+    </svg>
+  </div>
+
+  <!-- Animation Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    // Animate the X lines
+    gsap.to("#line1", {
+      duration: 1,
+      attr: { x2: 100, y2: 100 },
+      ease: "power4.out"
+    });
+
+    gsap.to("#line2", {
+      duration: 1,
+      attr: { x2: 0, y2: 100 },
+      ease: "power4.out"
+    });
+
+    gsap.from(".text", {
+      opacity: 0,
+      scale: 0,
+      delay: 1,
+      duration: 1,
+      ease: "back.out(1.7)"
+    });
+
+    // Redirect after animation
+    setTimeout(() => {
+      window.location.href = "home.html"; // Replace with your actual home page URL
+    }, 2500);
+  </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exploit Loader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+      font-family: 'Orbitron', sans-serif;
+      background: #0d0d0d;
+      overflow: hidden;
+    }
+
+    #loader {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background: #0d0d0d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    svg {
+      width: 80vw;
+      height: 80vw;
+      max-width: 300px;
+      max-height: 300px;
+    }
+
+    .text {
+      font-size: 10;
+      fill: #00ffff;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader with Animated X -->
+  <div id="loader">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <line id="line1" x1="0" y1="0" x2="0" y2="0" stroke="#0ff" stroke-width="6"/>
+      <line id="line2" x1="100" y1="0" x2="100" y2="0" stroke="#0ff" stroke-width="6"/>
+      <text x="50" y="50" class="text"></text>
+    </svg>
+  </div>
+
+  <!-- Animation Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    // Animate the X lines
+    gsap.to("#line1", {
+      duration: 1,
+      attr: { x2: 100, y2: 100 },
+      ease: "power4.out"
+    });
+
+    gsap.to("#line2", {
+      duration: 1,
+      attr: { x2: 0, y2: 100 },
+      ease: "power4.out"
+    });
+
+    gsap.from(".text", {
+      opacity: 0,
+      scale: 0,
+      delay: 1,
+      duration: 1,
+      ease: "back.out(1.7)"
+    });
+
+    // Redirect after animation
+    setTimeout(() => {
+      window.location.href = "home.html"; // Replace with your actual home page URL
+    }, 2500);
+  </script>
+
+</body>
+</html>

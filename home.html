@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exploit X - CTF</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+      font-family: 'popping', sans-serif;
+      background: url('assert/bg.jpeg') fixed center/cover no-repeat;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      background-color: black;
+    }
+
+    .countdown span {
+      font-size: 2.25rem;
+      margin: 0 0.75rem;
+      font-weight: 600;
+    }
+
+    .silver-text {
+      background: linear-gradient(135deg, #cfcfcf, #f0f0f0, #b0b0b0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #00f0ff, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-button {
+      background: linear-gradient(135deg, #00f0ff, #a855f7);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .gradient-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+    }
+
+    .content-box {
+      background: rgba(0, 0, 1, 0.6);
+      border: 1px solid rgba(75, 85, 99, 0.5);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .content-box:hover {
+      transform: translateY(-3px);
+    }
+
+    .sponsor-box {
+      background: rgba(251, 196, 0, 0.6);
+      border: 1px solid rgba(75, 85, 99, 0.5);
+      border-radius: 12px;
+      padding: 3rem;
+      text-align: center;
+      transition: transform 0.3s ease;
+      box-shadow: 0 0 30px gold;
+      opacity: 0.9;
+      min-width: 450px;
+      margin: 0 15px;
+    }
+
+    .sponsor-box:hover {
+      transform: translateY(-3px);
+    }
+
+    .icon-circle {
+      background: rgba(55, 65, 81, 0.8);
+      border-radius: 50%;
+      padding: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .rule-box {
+      background: rgba(6, 0, 71, 0.6);
+      border: 1px solid rgba(75, 85, 99, 0.5);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: transform 0.3s ease;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .rule-box:hover {
+      transform: translateY(-3px);
+    }
+
+    /* Auto-moving slideshow styles */
+    .slideshow-container {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      margin: auto;
+      border-radius: 16px;
+    }
+
+    .slideshow-container::before,
+    .slideshow-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .slideshow-container::before {
+      left: 0;
+      background: linear-gradient(to right, rgba(0, 0, 0, 0.7), transparent);
+    }
+
+    .slideshow-container::after {
+      right: 0;
+      background: linear-gradient(to left, rgba(0, 0, 0, 0.7), transparent);
+    }
+
+    .slides {
+      display: flex;
+      width: calc(450px * 10 + 30px * 9); /* 5 sponsors duplicated */
+      animation: slide 20s linear infinite;
+    }
+
+    .slide {
+      flex: 0 0 auto;
+    }
+
+    @keyframes slide {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-450px * 5 - 30px * 5)); }
+    }
+
+    /* Section transparency */
+    section:not(#hero), footer {
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    #hero {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+    }
+
+    /* Particle effect canvas */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="text-white">
+  <!-- Particle Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- Hero Section -->
+  <section id="hero" class="relative">
+    <!-- Huge Faded X -->
+    <div class="absolute text-[38rem] md:text-[55rem] font-black text-white opacity-15 z-18 leading-none select-none pointer-events-none -top-[20.5%] xl:-top-[15%]"
+         style="left: 50%; transform: translateX(-50%); font-family: Orbitron, sans-serif;">
+      X
+    </div>
+
+    <!-- Foreground Content -->
+    <div class="relative z-20 flex flex-col items-center justify-center text-center h-full text-white pt-20">
+      <!-- Main Title -->
+      <h1 class="text-[8rem] md:text-[8rem] font-extrabold leading-none silver-text -mt-24" style="font-family: Orbitron, sans-serif;">
+        ExploitX
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-[2rem] md:text-[2.8rem] font-semibold mt-4 silver-text" style="font-family: Orbitron, sans-serif;">
+        Into the Void
+      </p>
+
+      <!-- Register Button -->
+      <a href="#register" class="mt-8 gradient-button text-white px-6 py-2 text-lg rounded-full shadow-md tracking-wide">
+        Register
+      </a>
+
+      <!-- Timer -->
+      <div id="timer" class="mt-8 text-4xl md:text-5xl font-mono tracking-widest">
+        Loading...
+      </div>
+    </div>
+  </section>
+
+  <!-- Register Now Section -->
+  <section id="register" class="py-20 px-10">
+    <h2 class="text-5xl font-bold mb-4 text-center gradient-text">REGISTER NOW</h2>
+    <p class="text-lg text-center mb-8 text-gray-400">Join the most exciting cybersecurity competition of 2025</p>
+    <div class="flex flex-col md:flex-row justify-center gap-8 mb-10">
+      <div class="content-box text-center">
+        <h3 class="text-2xl font-semibold text-purple-400">REGULAR</h3>
+        <p class="text-sm text-gray-500 mt-1">MAR 1-14</p>
+        <p class="text-xl font-bold text-gray-200 mt-2">$25/team</p>
+      </div>
+    </div>
+    <div class="text-center">
+      <a href="/registration.html" class="inline-block gradient-button text-white px-8 py-3 text-lg rounded-full shadow-md tracking-wide">OPEN REGISTRATION FORM</a>
+    </div>
+    <p class="text-sm text-center mt-4 text-gray-500 max-w-2xl mx-auto">Registration includes access to all challenges, Discord community, and prize eligibility.</p>
+  </section>
+
+  <!-- About the Event -->
+  <section id="about" class="py-20 px-10">
+    <h2 class="text-4xl font-bold mb-6 text-center gradient-text">About Exploit X 2025</h2>
+    <p class="max-w-3xl text-lg mx-auto text-center text-gray-400 mb-10">
+      The ultimate cybersecurity competition where the brightest minds compete in challenges spanning web security, cryptography, reverse engineering, forensics, and more.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
+      <!-- Web Security -->
+      <div class="content-box text-center">
+        <div class="icon-circle">
+          <svg class="w-6 h-6 text-cyan-400 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 1l9 4v6c0 5-3.8 9.7-9 11-5.2-1.3-9-6-9-11V5l9-4z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-cyan-400">WEB SECURITY</h3>
+        <p class="text-sm mt-2 text-gray-500">XSS, SQLi, CSRF, and advanced web exploitation challenges</p>
+      </div>
+
+      <!-- Cryptography -->
+      <div class="content-box text-center">
+        <div class="icon-circle">
+          <svg class="w-6 h-6 text-purple-400 mx-auto" fill="currentColor" viewBox="0 0 24 28">
+            <path d="M12 1a5 5 0 00-5 5v3H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2h-1V6a5 5 0 00-5-5zm-3 5a3 3 0 116 0v3H9V6zm10 5v9H5v-9h14z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-purple-400">CRYPTOGRAPHY</h3>
+        <p class="text-sm mt-2 text-gray-500">Classical and modern cryptographic challenges</p>
+      </div>
+
+      <!-- Reverse Engineering -->
+      <div class="content-box text-center">
+        <div class="icon-circle">
+          <svg class="w-6 h-6 text-green-400 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v4H2V5h6zm0 10v4H2v-4h6zm2-5h4v4h-4v-4zm6-5h6v4h-6V5zm0 10h6v4h-6v-4z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-green-400">REVERSE ENGINEERING</h3>
+        <p class="text-sm mt-2 text-gray-500">Binary analysis, malware analysis, and code reversing</p>
+      </div>
+
+      <!-- Forensics -->
+      <div class="content-box text-center">
+        <div class="icon-circle">
+          <svg class="w-6 h-6 text-red-400 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16zm0-13a5 5 0 100 10 5 5 0 000-10zm0 8a3 3 0 110-6 3 3 0 010 6z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-red-400">FORENSICS</h3>
+        <p class="text-sm mt-2 text-gray-500">Digital forensics and incident response challenges</p>
+      </div>
+
+      <!-- Cloud Security -->
+      <div class="content-box text-center">
+        <div class="icon-circle">
+          <svg class="w-6 h-6 text-blue-400 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 14a4 4 0 010-8c.5 0 1 .1 1.5.3A6 6 0 0118 9a4 4 0 010 8H6z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-blue-400">CLOUD SECURITY</h3>
+        <p class="text-sm mt-2 text-gray-500">Challenges in AWS, GCP, Azure, and container exploitation</p>
+      </div>
+
+      <!-- OSINT -->
+      <div class="content-box text-center">
+        <div class="icon-circle">
+          <svg class="w-6 h-6 text-yellow-400 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2a10 10 0 00-9 14l-1 5 5-1a10 10 0 109-18zM8 12h8v2H8v-2zm0-4h8v2H8V8z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-yellow-400">OSINT</h3>
+        <p class="text-sm mt-2 text-gray-500">Reconnaissance, metadata scraping, and data leakage tracking</p>
+      </div>
+
+      <!-- Hardware -->
+      <div class="content-box text-center">
+        <div class="icon-circle">
+          <svg class="w-6 h-6 text-orange-400 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M4 5h16v14H4zM2 3v18h20V3H2zm6 4h8v2H8V7zm0 4h8v2H8v-2z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-orange-400">HARDWARE</h3>
+        <p class="text-sm mt-2 text-gray-500">IoT, device dumping, JTAG, and chip-off forensics</p>
+      </div>
+
+      <!-- AI/ML -->
+      <div class="content-box text-center">
+        <div class="icon-circle">
+          <svg class="w-6 h-6 text-pink-400 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-pink-400">AI / ML</h3>
+        <p class="text-sm mt-2 text-gray-500">Adversarial ML, model poisoning, AI-driven exploit crafting</p>
+      </div>
+
+      <!-- Binary Exploit -->
+      <div class="content-box text-center align-items-center col-start-2">
+        <div class="icon-circle">
+          <svg class="w-6 h-6 text-indigo-400 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M4 4h16v4H4V4zm0 6h16v4H4v-4zm0 6h16v4H4v-4z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-indigo-400">BINARY EXPLOIT</h3>
+        <p class="text-sm mt-2 text-gray-500">Stack smashing, heap overflows, and ROP chains</p>
+      </div>
+
+      <!-- Games -->
+      <div class="content-box text-center align-items-center col-start-3">
+        <div class="icon-circle">
+          <svg class="w-6 h-6 text-lime-400 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M5 4h14a2 2 0 012 2v12a2 2 0 01-2 2h-4l-2-2h-4l-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2zm5 8a2 2 0 100-4 2 2 0 000 4zm6 1a1 1 0 110-2 1 1 0 010 2zm-1 3a1 1 0 110-2 1 1 0 010 2z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-lime-400">GAMES</h3>
+        <p class="text-sm mt-2 text-gray-500">Security puzzles, stego, and capture-the-flag adventure rounds</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rules & Guidelines Section -->
+  <section id="rules-guidelines" class="py-20 px-10">
+    <h2 class="text-4xl font-bold mb-6 text-center gradient-text">Rules & Guidelines</h2>
+    <p class="text-lg text-center mb-10 text-gray-400 max-w-3xl mx-auto">Fair play and clear guidelines ensure a competitive and enjoyable experience for all participants.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center">
+      <!-- Rules Card -->
+      <div class="rule-box mx-auto">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="icon-circle">
+            <svg class="w-5 h-5 text-cyan-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+          </div>
+          <h3 class="text-xl font-semibold text-cyan-400">Rules</h3>
+        </div>
+        <ul class="list-disc list-inside text-gray-500 space-y-2">
+          <li>No sharing of flags, hints, or solutions with other teams during the competition.</li>
+          <li>Do not attack the CTF infrastructure or other participants’ systems.</li>
+          <li>Brute force attacks on the platform are prohibited.</li>
+          <li class="text-red-400">Violation of rules will result in immediate disqualification.</li>
+        </ul>
+      </div>
+      <!-- Guidelines Card -->
+      <div class="rule-box mx-auto">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="icon-circle">
+            <svg class="w-5 h-5 text-cyan-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+          </div>
+          <h3 class="text-xl font-semibold text-cyan-400">Guidelines</h3>
+        </div>
+        <ul class="list-disc list-inside text-gray-500 space-y-2">
+          <li>Teams can have 1-4 members. Individual participation is also allowed.</li>
+          <li>Points are awarded based on challenge difficulty. First blood bonuses apply.</li>
+          <li>Prizes will be awarded to top 10 teams. Winners must provide valid identification.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sponsors -->
+  <section id="sponsors" class="py-20 px-10">
+    <h2 class="text-4xl font-bold mb-6 text-center text-yellow-400">Our Sponsors</h2>
+    <p class="text-lg text-center mb-10 text-gray-400">Powered by industry leaders in cybersecurity</p>
+    <div class="slideshow-container">
+      <div class="slides">
+        <!-- Original sponsors -->
+        <div class="slide">
+          <div class="sponsor-box">
+            <div class="icon-circle">
+              <svg class="w-10 h-10 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+            </div>
+            <h4 class="text-2xl font-semibold text-gray-200">CyberSec Corp</h4>
+            <p class="text-base mt-2 text-gray-500">Leading cybersecurity solutions provider</p>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="sponsor-box">
+            <div class="icon-circle">
+              <svg class="w-10 h-10 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+            </div>
+            <h4 class="text-2xl font-semibold text-gray-200">SecureNet</h4>
+            <p class="text-base mt-2 text-gray-500">Enterprise security platform</p>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="sponsor-box">
+            <div class="icon-circle">
+              <svg class="w-10 h-10 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8z"/></svg>
+            </div>
+            <h4 class="text-2xl font-semibold text-gray-200">TechGuard</h4>
+            <p class="text-base mt-2 text-gray-2">Advanced threat protection</p>
+          </div>
+        </div>
+      <div class="slide">
+          <div class="sponsor-box">
+            <div class="icon-circle">
+              <svg class="w-10 h-10 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+            </div>
+            <h4 class="text-2xl font-semibold text-gray-200">InfoSecPro</h4>
+            <p class="text-base mt-2 text-gray-500">Professional security services</p>
+          </div>
+        </div>
+      <div class="slide">
+          <div class="sponsor-box">
+            <div class="icon-circle">
+              <svg class="w-10 h-10 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+            </div>
+            <h4 class="text-2xl font-semibold text-gray-200">CyberDefense</h4>
+            <p class="text-base mt-2 text-gray-500">Comprehensive cyber defense solutions</p>
+          </div>
+        </div>
+        <!-- Duplicated sponsors for seamless loop -->
+        <div class="slide">
+          <div class="sponsor-box">
+            <div class="icon-circle">
+              <svg class="w-10 h-10 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8-8-3.59 8-8 8z"/></svg>
+            </div>
+            <h4 class="text-2xl font-semibold text-gray-200">CyberSec Corp</h4>
+            <p class="text-base mt-2 text-gray-500">Leading cybersecurity solutions provider</p>
+          </div>
+        </div>
+      <div class="slide">
+          <div class="sponsor-box">
+            <div class="icon-circle">
+              <svg class="w-10 h-10 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8-3.59 8 8-8-3.59 8z"/></svg>
+            </div>
+            <h4 class="text-2xl font-semibold text-gray-200">SecureNet</h4>
+            <p class="text-base mt-2 text-gray-500">Enterprise security platform</p>
+          </div>
+        </div>
+      <div class="slide">
+          <div class="sponsor-box">
+            <div class="icon-circle">
+              <svg class="w-10 h-10 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+            </div>
+            <h4 class="text-2xl font-semibold text-gray-200">TechGuard</h4>
+            <p class="text-base mt-2 text-gray-500">Advanced threat protection</p>
+          </div>
+        </div>
+      <div class="slide">
+          <div class="sponsor-box">
+            <div class="icon-circle">
+              <svg class="w-10 h-10 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+            </div>
+            <h4 class="text-2xl font-semibold text-gray-200">InfoSec Pro</h4>
+            <p class="text-base mt-2 text-gray-500">Professional security services</p>
+          </div>
+        </div>
+      <div class="slide">
+          <div class="sponsor-box">
+            <div class="icon-circle">
+              <svg class="w-10 h-10 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+            </div>
+            <h4 class="text-2xl font-semibold text-gray-200">CyberDefense</h4>
+            <p class="text-base mt-2 text-gray-500">Comprehensive cyber defense solutions</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-10">
+      <h3 class="text-xl font-semibold mb-4 text-gray-200 uppercase">Interested in Sponsoring?</h3>
+      <p class="text-lg mb-6 text-gray-400 max-w-2xl mx-auto">Join us in supporting the next generation of cybersecurity professionals. Contact us for sponsorship options.</p>
+      <a href="mailto:info@exploitx.com" class="inline-block gradient-button text-white px-8 py-3 text-lg rounded-full shadow-md tracking-wide">CONTACT US</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-10 px-10 border-t border-gray-700">
+    <div class="flex flex-col md:flex-row justify-center gap-10 mb-6">
+      <div class="text-center">
+        <h3 class="text-xl font-semibold text-cyan-400 mb-2">Exploit X 2025</h3>
+        <p class="text-sm text-gray-500 max-w-xs mx-auto">The premier cybersecurity competition bringing together the brightest minds in info security.</p>
+        <div class="flex justify-center gap-4 mt-3">
+          <a href="#" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1h-4v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></a>
+          <a href="#" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 16h-3v-6h3v6zm-3-7h-3V5h3v6zm-4 7H7v-3h3v3zm0-4H7v-3h3v3z"/></svg></a>
+          <a href="#" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 16h-2v-2h2v2zm0-4h-2v-4h2v4zm-4 4h-2v-6h2v6zm-4 0H7v-2h2v2zm0-4H7v-4h2v4z"/></svg></a>
+        </div>
+      </div>
+      <div class="text-center">
+        <h3 class="text-xl font-semibold text-cyan-400 mb-2">Quick Links</h3>
+        <ul class="text-sm space-y-2">
+          <li><a href="#about" class="text-gray-400 hover:text-white">About</a></li>
+          <li><a href="#rules-guidelines" class="text-gray-400 hover:text-white">Rules & Guidelines</a></li>
+          <li><a href="#register" class="text-gray-400 hover:text-white">Registration</a></li>
+          <li><a href="#sponsors" class="text-gray-400 hover:text-white">Sponsors</a></li>
+        </ul>
+      </div>
+      <div class="text-center">
+        <h3 class="text-xl font-semibold text-cyan-400 mb-2">Contact</h3>
+        <p class="text-sm"><a href="mailto:info@exploitx.com" class="text-gray-400 hover:text-white">info@exploitx.com</a></p>
+        <p class="text-sm mt-1"><a href="#" class="text-gray-400 hover:text-white">Discord: ExploitX2025</a></p>
+      </div>
+    </div>
+    <p class="text-sm mt-4 text-gray-500 text-center">© 2025 Exploit X. All rights reserved. Built with <span class="text-red-400">❤️</span> for the cybersecurity community.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Timer Script
+    const targetDate = new Date("2025-06-23T12:00:00").getTime();
+
+    function updateTimer() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("timer").innerHTML =
+        `<span>${String(days).padStart(2, '0')}</span> : <span>${String(hours).padStart(2, '0')}</span> : <span>${String(minutes).padStart(2, '0')}</span> : <span>${String(seconds).padStart(2, '0')}</span>`;
+
+      if (distance < 0) {
+        document.getElementById("timer").innerHTML = "CTF Started!";
+      }
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // Particle Effect Script
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const particles = [];
+    const particleCount = 100;
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedY = Math.random() * 2 + 1;
+        this.opacity = Math.random() * 0.5 + 0.3;
+      }
+
+      update() {
+        this.y += this.speedY;
+        this.opacity -= 0.002;
+        if (this.y > canvas.height || this.opacity <= 0) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+  </script>
+</body>
+</html>

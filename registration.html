@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Registration</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('assert/bg.jpeg') fixed center/cover no-repeat;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .registration-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+            animation: fadeIn 0.5s ease-in-out;
+            backdrop-filter: blur(15px);
+
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .registration-box h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #007BFF;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            background-color: transparent;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        .form-group input::placeholder {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: #333 1px 1px 2px;
+        }
+        .form-group input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        .form-group img {
+            display: block;
+            margin: 15px auto;
+            max-width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group .copy-id {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #2a3352, #d39679);
+
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        @media (max-width: 768px) {
+            .registration-box {
+                padding: 20px;
+            }
+            .submit-btn {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-box">
+        <h2>Team Registration</h2>
+        <form id="registrationForm">
+            <div class="form-group">
+                <input type="text" id="teamName" name="teamName"  placeholder="Enter Team Name"  required>
+                <div class="error-message" id="teamNameError"></div>
+            </div>
+            <div class="form-group">
+                <input type="text" id="player1Username" name="player1Username" placeholder="Enter Player 1 Username" required>
+                <div class="error-message" id="player1UsernameError"></div>
+            </div>
+            <div class="form-group">
+                <input type="text" id="player2Username" name="player2Username" placeholder="Enter Player 2 Username" required>
+                <div class="error-message" id="player2UsernameError"></div>
+            </div>
+            <div class="form-group">
+                <input type="email" id="mailId" name="mailId" placeholder="Enter Email ID" required>
+            </div>
+            <div class="form-group">
+                <img src="payment-qr-placeholder.png" alt="Payment QR Code">
+                <div class="copy-id">Payment ID: <span id="paymentId">123456789</span></div>
+            </div>
+            <button type="submit" class="submit-btn">Register</button>
+        </form>
+    </div>
+
+    <script>
+        const registrationForm = document.getElementById('registrationForm');
+
+        registrationForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const teamName = document.getElementById('teamName').value;
+            const player1Username = document.getElementById('player1Username').value;
+            const player2Username = document.getElementById('player2Username').value;
+
+            const teamNameError = document.getElementById('teamNameError');
+            const player1UsernameError = document.getElementById('player1UsernameError');
+            const player2UsernameError = document.getElementById('player2UsernameError');
+
+            teamNameError.textContent = '';
+            player1UsernameError.textContent = '';
+            player2UsernameError.textContent = '';
+
+            try {
+                const response = await fetch('https://your-gform-endpoint.com/check', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ teamName, player1Username, player2Username }),
+                });
+
+                const result = await response.json();
+
+                if (result.errors) {
+                    if (result.errors.teamName) {
+                        teamNameError.textContent = result.errors.teamName;
+                    }
+                    if (result.errors.player1Username) {
+                        player1UsernameError.textContent = result.errors.player1Username;
+                    }
+                    if (result.errors.player2Username) {
+                        player2UsernameError.textContent = result.errors.player2Username;
+                    }
+                } else {
+                    alert('Registration successful!');
+                    registrationForm.reset();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the form.');
+            }
+        });
+    </script>
+</body>
+</html>
